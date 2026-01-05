@@ -1,46 +1,155 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { useContext } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { FormContext } from './_layout';
 
-export default function Page() {
+export default function ProfileScreen() {
+  const router = useRouter();
+  const { formData, updateField } = useContext(FormContext);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>Hello World</Text>
-        <Text style={styles.subtitle}>This is the first page of your app.</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>Profile</Text>
         
-        {/* Добавляем ссылку для навигации */}
-        <Link href="/about" style={styles.link}>
-          Go to About Page
-        </Link>
-      </View>
-    </View>
+        <View style={styles.imageBox} />
+        
+        <Text style={styles.label}>Your name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={formData.name}
+          onChangeText={(text) => updateField('name', text)}
+        />
+        
+        <Text style={styles.label}>Your gender</Text>
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={[
+              styles.halfButton,
+              formData.gender === 'Male' && styles.activeButton
+            ]}
+            onPress={() => updateField('gender', 'Male')}
+          >
+            <Text style={[
+              styles.buttonText,
+              formData.gender === 'Male' && styles.activeButtonText
+            ]}>
+              Male
+            </Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={[
+              styles.halfButton,
+              formData.gender === 'Female' && styles.activeButton
+            ]}
+            onPress={() => updateField('gender', 'Female')}
+          >
+            <Text style={[
+              styles.buttonText,
+              formData.gender === 'Female' && styles.activeButtonText
+            ]}>
+              Female
+            </Text>
+          </TouchableOpacity>
+        </View>
+        
+        <Text style={styles.label}>Your age</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Age"
+          keyboardType="numeric"
+          value={formData.age}
+          onChangeText={(text) => updateField('age', text)}
+        />
+        
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={() => router.push('/program1')}
+        >
+          <Text style={styles.nextButtonText}>Next</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    padding: 24,
+    backgroundColor: '#fff',
   },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 40,
   },
   title: {
-    fontSize: 64,
-    fontWeight: "bold",
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    marginTop: 10,
   },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+  imageBox: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 12,
+    marginBottom: 20,
   },
-  link: {
-    marginTop: 20,
-    fontSize: 24,
-    color: "blue",
-    textDecorationLine: "underline",
+  label: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 8,
+    marginTop: 12,
+  },
+  input: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  halfButton: {
+    flex: 1,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  activeButton: {
+    backgroundColor: '#9e9e9e',
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  activeButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  nextButton: {
+    backgroundColor: '#9e9e9e',
+    borderRadius: 12,
+    padding: 18,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  nextButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
